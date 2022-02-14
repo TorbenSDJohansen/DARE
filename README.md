@@ -25,9 +25,8 @@ pip install imutils timm
 ```
 
 After making sure all dependencies are installed, use the following code to install `timmsn`.
-**TODO** where is this hosted?
 ```
-pip install -e .
+pip install path/to/timm-sequence-net
 ```
 
 ### Model Zoo
