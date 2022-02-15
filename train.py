@@ -439,7 +439,8 @@ def main(): # pylint: disable=R0914, R0912, R0915, C0116
 
     if args.initial_log:
         assert clean_pred is not None
-        initial_log(args, output_dir, loader_train, loader_eval, clean_pred)
+        if args.rank == 0:
+            initial_log(args, output_dir, loader_train, loader_eval, clean_pred)
 
     try:
         for epoch in range(start_epoch, num_epochs):
