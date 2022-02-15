@@ -6,7 +6,7 @@
 
 import numpy as np
 
-from timmsn.data.formatters.registry import register_formatter
+from timmsn.data.formatters import register_formatter, NumSeqFormatter
 
 
 def _sanitize(raw_input: str or int or float):
@@ -91,14 +91,20 @@ def svhn_as_date() -> NumSeqToDateLikeFormatter:
     return NumSeqToDateLikeFormatter()
 
 
-def _test_formatter():
-    formatter = NumSeqToDateLikeFormatter()
+@register_formatter
+def svhn_as_numseq() -> NumSeqFormatter:
+    return NumSeqFormatter(5, 1)
 
-    for i in range(1, 100_000):
-        for cast_to_type in (int, float, str):
-            label = formatter.transform_label(cast_to_type(i))
-            original = formatter.clean_pred(label.astype(int))
-            assert int(i) == original
+
+def _test_formatter():
+    formatters = (svhn_as_numseq(), svhn_as_date())
+
+    for formatter in formatters:
+        for i in range(1, 100_000):
+            for cast_to_type in (int, float, str):
+                label = formatter.transform_label(cast_to_type(i))
+                original = formatter.clean_pred(label.astype(int))
+                assert int(i) == original
 
 
 if __name__ == '__main__':
