@@ -197,6 +197,9 @@ def validate(args): # pylint: disable=C0116, R0914, R0912, R0915
         'prob': seq_prob,
         })
 
+    acc = 100 * (pred_df['label'] == pred_df['pred']).mean()
+    print(f'Accuracy: {acc}%.')
+
     if args.return_individual_probs:
         for i, probs in enumerate(digit_probs.T):
             pred_df[f'prob_{i}'] = probs
@@ -206,7 +209,7 @@ def validate(args): # pylint: disable=C0116, R0914, R0912, R0915
 
     pred_df.to_csv(os.path.join(output_dir, 'preds.csv'), index=False)
 
-    if args.plots is not None and 'cov-acc' in args.plot or 'cer-acc' in args.plots:
+    if args.plots is not None and ('cov-acc' in args.plots or 'cer-acc' in args.plots):
         eval_dfs = {'full': pred_df,}
         if args.eval_plots_omit_most_occ > 0:
             vals, counts = np.unique(labels_clean, return_counts=True)
