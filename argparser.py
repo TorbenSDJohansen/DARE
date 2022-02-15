@@ -8,6 +8,50 @@
 import argparse
 
 
+HELP_STR_DATASET_STRUCTURE = '''Dataset can be structured these ways:
+-----------------
+separate:
+    labels/
+        train/
+            cell-1.{csv, npy, ...}
+            cell-2.{csv, npy, ...}
+            ...
+        test/
+            cell-1.{csv, npy, ...}
+            cell-2.{csv, npy, ...}
+            ...
+    minipics/
+        cell-1/
+            image1.{png, jpg, ...}
+            image2.{png, jpg, ...}
+            ...
+        cell-2/
+            image1.{png, jpg, ...}
+            image2.{png, jpg, ...}
+            ...
+        ...
+-----------------
+nested:
+    labels/
+        cell-1.{csv, npy, ...}
+        cell-2.{csv, npy, ...}
+        ...
+        test/
+            cell-1.{csv, npy, ...}
+            cell-2.{csv, npy, ...}
+            ...
+    minipics/
+        cell-1/
+            image1.{png, jpg, ...}
+            image2.{png, jpg, ...}
+            ...
+        cell-2/
+            image1.{png, jpg, ...}
+            image2.{png, jpg, ...}
+            ...
+        ...
+'''
+
 def construct_parser(): # pylint: disable=R0915
     ''' Construct general-case parser, to be used for training, evaluation,
     and predicting. This is possible as all non-used arguments are ignored, and
@@ -24,16 +68,23 @@ def construct_parser(): # pylint: disable=R0915
     parser = argparse.ArgumentParser(
         description='PyTorch ImageNet Training') # pylint: disable=C0103
 
-    # Dataset / Model parameters
+    # Dataset
     parser.add_argument('--data_dir', '-datadir', metavar='DIR',
                         default='',
                         help='path to dataset')
-    parser.add_argument('--dataset', '-d', metavar='NAME', default='', nargs='+',
-                        help='dataset type (default: ImageFolder/ImageTar if empty)')
+    parser.add_argument('--dataset', '-d', metavar='NAME(s)', default='', nargs='+',
+                        help='dataset name(s), i.e. name of folder within data_dir')
+    parser.add_argument('--dataset-structure', type=str, default='separate',
+                        choices=['separate', 'nested'], help=HELP_STR_DATASET_STRUCTURE)
+    # TODO introduce *-notation and potentially load from file if file specified
+    parser.add_argument('--dataset-cells', type=str, nargs='+', default=None,
+                        help='Only choose specified subset of label cells (default: none)')
     parser.add_argument('--train-split', metavar='NAME', default='train',
                         help='dataset train split (default: train)')
     parser.add_argument('--val-split', metavar='NAME', default='validation',
                         help='dataset validation split (default: validation)')
+
+    # Model (and some dataset info for loading)
     parser.add_argument('--model', default='resnet101', type=str, metavar='MODEL',
                         help='Name of model to train (default: "countception"')
     parser.add_argument('--pretrained', action='store_true', default=False,
@@ -242,11 +293,11 @@ def construct_parser(): # pylint: disable=R0915
     parser.add_argument('--no-test-pool', dest='no_test_pool', action='store_true',
                         help='disable test time pool')
     parser.add_argument('--num-gpu', type=int, default=1,
-                        help='Number of GPUS to use')
+                        help='Number of GPUS to use for evaluation and prediction.')
     parser.add_argument('--tf-preprocessing', action='store_true', default=False,
                         help='Use Tensorflow preprocessing pipeline (require CPU TF installed')
-    # parser.add_argument('--class-map', default='', type=str, metavar='FILENAME', # TODO delete?
-    #                     help='path to class to idx mapping file (default: "")')
+    parser.add_argument('--class-map', default='', type=str, metavar='FILENAME',
+                        help='path to class to idx mapping file (default: "")')
     # parser.add_argument('--valid-labels', default='', type=str, metavar='FILENAME', # TODO delete?
     #                     help='Valid label indices txt file for validation of partial label space')
     # parser.add_argument('--real-labels', default='', type=str, metavar='FILENAME', # TODO delete?
@@ -273,7 +324,6 @@ def construct_parser(): # pylint: disable=R0915
                         help='How to construct evaluation data when training, e.g., "test" or "train-split-0.05" for 5% of training data.')  # TODO change "train-split-0.05" style to "--val-split test[:50%]" style, see https://github.com/rwightman/pytorch-image-models/discussions/973
     parser.add_argument('--data-split', default=None, type=str, choices=['train', 'test', 'predict'],
                         help='Explicitly choose train/test/predict dataset. Default to appropriate (train to train, etc.)')
-    # TODO subset of "cells" selection in some fashion. Perhaps even *-notation etc., to use, e.g., date*
     parser.add_argument('--formatter', default=None, type=str,
                         help='Choose a formatter. Dataset default otherwise used if using a bdatasets dataset.')
     parser.add_argument('--formatter-kwargs', default=None, type=str,
@@ -282,7 +332,7 @@ def construct_parser(): # pylint: disable=R0915
                             'This should be provided in the form "kwarg1=XX:kwarg2=YY", i.e. : seperated.'
                             )
                         )
-    parser.add_argument('--sqnet-version', type=str, default='v2', choices=['v1', 'v2'],
+    parser.add_argument('--sqnet-version', type=str, default='v2', choices=['v1', 'v2'], # TODO raise depreated warning if v1
                         help='SequenceNet version to base sequence model on.')
 
     return config_parser, parser
