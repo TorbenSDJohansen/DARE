@@ -76,9 +76,13 @@ def construct_parser(): # pylint: disable=R0915
                         help='dataset name(s), i.e. name of folder within data_dir')
     parser.add_argument('--dataset-structure', type=str, default='separate',
                         choices=['separate', 'nested'], help=HELP_STR_DATASET_STRUCTURE)
+
     # TODO introduce *-notation and potentially load from file if file specified
     parser.add_argument('--dataset-cells', type=str, nargs='+', default=None,
                         help='Only choose specified subset of label cells (default: none)')
+    parser.add_argument('--dataset-cells-eval', type=str, nargs='+', default=None,
+                        help='Only choose specified subset of label cells for validation during training (default: none, in case --dataset-cells used)')
+
     parser.add_argument('--train-split', metavar='NAME', default='train',
                         help='dataset train split (default: train)')
     parser.add_argument('--val-split', metavar='NAME', default='validation',
