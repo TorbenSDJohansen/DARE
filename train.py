@@ -57,7 +57,7 @@ from timmsn.loss import (
 from timmsn.utils import sequence_accuracy, initial_log
 from timmsn.models import create_model
 from timmsn.data import create_loader
-from timmsn.data.parsers import setup_sqnet_parser
+from timmsn.data.parsers import setup_sqnet_parser, setup_bdatasets_parser
 
 # other imports
 from argparser import construct_parser
@@ -113,7 +113,12 @@ def main(): # pylint: disable=R0914, R0912, R0915, C0116
         args.dataset = args.dataset[0]
 
     parser_train = parser_eval = clean_pred = None
-    if args.formatter is not None:
+    if isinstance(args.dataset, str) and args.dataset.startswith('bdatasets.'):
+        assert args.sequence_model, 'bdatasets are for sequences'
+        parser_train, parser_eval, clean_pred = setup_bdatasets_parser(
+            args=args, purpose='train', split=args.data_split or 'train',
+            )
+    elif args.formatter is not None:
         assert args.sequence_model
         parser_train, parser_eval, clean_pred = setup_sqnet_parser(
             args=args, purpose='train', split=args.data_split or 'train',
@@ -565,7 +570,7 @@ def train_one_epoch( # pylint: disable=R0913, R0914, R0912, R0915, C0116
                     '({batch_time.avg:.3f}s, {rate_avg:>7.2f}/s)  '
                     'LR: {lr:.3e}  '
                     'Data: {data_time.val:.3f} ({data_time.avg:.3f})'.format(
-                        epoch + 1,
+                        epoch,
                         batch_idx, last_idx,
                         100. * batch_idx / last_idx,
                         loss=losses_m,

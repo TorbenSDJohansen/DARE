@@ -25,7 +25,7 @@ from timmsn.utils import (
     )
 from timmsn.models import create_model
 from timmsn.data import create_loader
-from timmsn.data.parsers import setup_sqnet_parser
+from timmsn.data.parsers import setup_sqnet_parser, setup_bdatasets_parser
 
 # other imports
 from train import _parse_args
@@ -68,14 +68,19 @@ def main():
         print('WARNING: Predicting without any checkpoint to load model from.')
     else:
         # If checkpoint, no sense in first loading pretrained weights and then
-        # overriding with resume checkpoint.
+        # overwriting with resume checkpoint.
         args.pretrained = False
 
     if len(args.dataset) == 1:
         args.dataset = args.dataset[0]
 
     parser_predict = clean_pred = None
-    if args.formatter is not None:
+    if isinstance(args.dataset, str) and args.dataset.startswith('bdatasets.'):
+        assert args.sequence_model, 'bdatasets are for sequences'
+        parser_predict, _, clean_pred = setup_bdatasets_parser(
+            args=args, purpose='predict', split=args.data_split or 'predict',
+            )
+    elif args.formatter is not None:
         assert args.sequence_model
         parser_predict, _, clean_pred = setup_sqnet_parser(
             args=args, purpose='predict', split=args.data_split or 'predict',
