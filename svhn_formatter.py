@@ -6,7 +6,8 @@
 
 import numpy as np
 
-from timmsn.data.formatters import register_formatter, NumSeqFormatter
+from timmsn.data.formatters import register_formatter
+from timmsn.data.formatters import NumSeqFormatter as TimmsnNumSeqFormatter
 
 
 def _sanitize(raw_input: str or int or float):
@@ -20,6 +21,60 @@ def _sanitize(raw_input: str or int or float):
     raw_input = str(raw_input)
 
     return raw_input
+
+
+class NumSeqFormatter: # pylint: disable=C0115
+    def __init__(self):
+        self.max_len = 5
+        self.min_len = 1
+        self.num_classes = [10, 11, 11, 11, 11]
+
+    def transform_label(self, raw_input: int or float or str) -> np.ndarray: # pylint: disable=C0116
+        mod_input = _sanitize(raw_input)
+
+        if mod_input is None:
+            return mod_input
+
+        assert self.max_len >= len(mod_input) >= self.min_len
+        label = []
+
+        for digit in mod_input:
+            label.append(int(digit))
+
+        label += [10] * (self.max_len - len(mod_input))
+
+        # Assert consistency.
+        assert mod_input == str(self.clean_pred(label, False)), self.clean_pred(label, False)
+
+        label = np.array(label).astype('float')
+
+        return label
+
+    def clean_pred(self, raw_pred: np.ndarray, assert_consistency: bool = True) -> int: # pylint: disable=C0116
+        # Delete 10s (i.e. no number). Note first number is never 10.
+        pred = raw_pred.copy()
+        pred = [x for x in pred if x != 10]
+
+        raw_pred_mod = np.array(pred + [10] * (self.max_len - len(pred)))
+
+        # NOTE: First token should never be zero, but technically possible now.
+        # Maybe cast 0 -> 1? First digit probably most likely 1.
+
+        clean = []
+
+        for val in pred:
+            clean.append(str(val))
+
+        clean = str(''.join(clean))
+
+        # Need to be cycle consistent - however, the function may be called from
+        # `transform_label`, and we do not want infinite recursion, hence the if.
+        if assert_consistency:
+            transformed_clean = self.transform_label(clean)
+            if not (transformed_clean is None or all(raw_pred_mod.astype('float') == transformed_clean)):
+                raise Exception(raw_pred, pred, clean, transformed_clean)
+
+        return clean
 
 
 class NumSeqToDateLikeFormatter: # pylint: disable=C0115
@@ -74,7 +129,7 @@ class NumSeqToDateLikeFormatter: # pylint: disable=C0115
         for val in pred:
             clean.append(str(val))
 
-        clean = int(''.join(clean))
+        clean = str(''.join(clean))
 
         # Need to be cycle consistent - however, the function may be called from
         # `transform_label`, and we do not want infinite recursion, hence the if.
@@ -93,7 +148,11 @@ def svhn_as_date() -> NumSeqToDateLikeFormatter:
 
 @register_formatter
 def svhn_as_numseq() -> NumSeqFormatter:
-    return NumSeqFormatter(5, 1)
+    return NumSeqFormatter()
+
+
+def svhn_as_numseq_timmsn() -> TimmsnNumSeqFormatter:
+    return TimmsnNumSeqFormatter(5, 1) # TODO change?
 
 
 def _test_formatter():
@@ -101,10 +160,12 @@ def _test_formatter():
 
     for formatter in formatters:
         for i in range(1, 100_000):
+            if i % 10_000 == 0:
+                print(i)
             for cast_to_type in (int, float, str):
                 label = formatter.transform_label(cast_to_type(i))
                 original = formatter.clean_pred(label.astype(int))
-                assert int(i) == original
+                assert str(i) == original
 
 
 if __name__ == '__main__':
