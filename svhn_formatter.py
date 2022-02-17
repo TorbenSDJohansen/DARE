@@ -44,7 +44,7 @@ class NumSeqFormatter: # pylint: disable=C0115
         label += [10] * (self.max_len - len(mod_input))
 
         # Assert consistency.
-        assert mod_input == str(self.clean_pred(label, False)), self.clean_pred(label, False)
+        assert mod_input == str(self.clean_pred(label, False))
 
         label = np.array(label).astype('float')
 
@@ -108,7 +108,7 @@ class NumSeqToDateLikeFormatter: # pylint: disable=C0115
             label[self.map_digit_idx_to_pos[i]] = int(digit)
 
         # Assert consistency.
-        assert mod_input == str(self.clean_pred(label, False)), self.clean_pred(label, False)
+        assert mod_input == str(self.clean_pred(label, False))
 
         label = np.array(label).astype('float')
 

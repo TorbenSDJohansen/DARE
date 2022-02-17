@@ -79,9 +79,12 @@ def construct_parser(): # pylint: disable=R0915
 
     # TODO introduce *-notation and potentially load from file if file specified
     parser.add_argument('--dataset-cells', type=str, nargs='+', default=None,
-                        help='Only choose specified subset of label cells (default: none)')
+                        help='Only choose specified subset of label/image cells (default: none)')
     parser.add_argument('--dataset-cells-eval', type=str, nargs='+', default=None,
-                        help='Only choose specified subset of label cells for validation during training (default: none, in case --dataset-cells used)')
+                        help='Only choose specified subset of label/image cells for validation during training (default: none, in case --dataset-cells used)')
+
+    parser.add_argument('--labels-subdir', type=str, nargs='+', default='',
+                        help='For each dataset, specify name of subdir inside labels/ (default: do not use subdirs)')
 
     parser.add_argument('--train-split', metavar='NAME', default='train',
                         help='dataset train split (default: train)')
