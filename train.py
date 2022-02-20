@@ -203,7 +203,8 @@ def main(): # pylint: disable=R0914, R0912, R0915, C0116
         bn_momentum=args.bn_momentum,
         bn_eps=args.bn_eps,
         scriptable=args.torchscript,
-        checkpoint_path=args.initial_checkpoint)
+        checkpoint_path=args.initial_checkpoint,
+        drop_modules=args.drop_modules)
     if args.num_classes is None:
         assert hasattr(model, 'num_classes'), 'Model must have `num_classes` attr if not set on cmd line/config.'
         args.num_classes = model.num_classes
@@ -310,7 +311,7 @@ def main(): # pylint: disable=R0914, R0912, R0915, C0116
         lr_scheduler.step(start_epoch)
 
     if args.local_rank == 0:
-        _logger.info('Scheduled epochs: {}'.format(num_epochs)) # pylint: disable=W1202
+        _logger.info('Scheduled epochs: {} (0-{})'.format(num_epochs, num_epochs- 1)) # pylint: disable=W1202
 
     # create the train and eval datasets
     dataset_train = create_dataset(

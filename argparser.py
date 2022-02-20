@@ -98,6 +98,8 @@ def construct_parser(): # pylint: disable=R0915
                         help='Start with pretrained version of specified network (if avail)')
     parser.add_argument('--initial-checkpoint', default='', type=str, metavar='PATH',
                         help='Initialize model from this checkpoint (default: none)')
+    parser.add_argument('--drop-modules', type=str, nargs='+', default=None,
+                        help='List of modules to drop from initial checkpoint (useful to cut head when using TL)')
     parser.add_argument('--resume', default='', type=str, metavar='PATH',
                         help='Resume full model and optimizer state from checkpoint (default: none)')
     parser.add_argument('--no-resume-opt', action='store_true', default=False,
