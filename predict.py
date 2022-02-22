@@ -116,6 +116,7 @@ def main():
         sqnet_version=args.sqnet_version,
         num_classes=args.num_classes,
         in_chans=3,
+        global_pool=args.gp,
         pretrained=args.pretrained,
         checkpoint_path=args.checkpoint,
         )
@@ -145,6 +146,7 @@ def main():
         dataset,
         input_size=config['input_size'],
         batch_size=args.batch_size,
+        resize_method=args.resize_method,
         use_prefetcher=args.prefetcher,
         interpolation=config['interpolation'],
         mean=config['mean'],

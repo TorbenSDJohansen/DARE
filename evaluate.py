@@ -171,6 +171,7 @@ def validate(args): # pylint: disable=C0116, R0914, R0912, R0915
         dataset,
         input_size=data_config['input_size'],
         batch_size=args.batch_size,
+        resize_method=args.resize_method,
         use_prefetcher=args.prefetcher,
         interpolation=data_config['interpolation'],
         mean=data_config['mean'],
