@@ -20,7 +20,7 @@ Then prepare an environment (here using conda and the name `timmsn`):
 ```
 conda create -n DARE numpy pandas pillow scikit-learn tensorboard opencv matplotlib pyyaml
 conda activate DARE
-conda install pytorch torchvision torchaudio cudatoolkit=11.3 -c pytorch
+conda install pytorch=1.9 torchvision=0.10 torchaudio cudatoolkit=10.2 -c pytorch
 pip install imutils timm=0.5.4
 ```
 
