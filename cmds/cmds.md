@@ -120,85 +120,22 @@ set cexp=death-certificates-1
 python predict.py --formatter dates_ddmyyyy --output Z:\faellesmappe\tsdj\DARE\pred\%cexp%\%cexp% --dataset %cexp% --experiment %cexp% --checkpoint %EXPDIR%\%cexp%\last.pth.tar --config %EXPDIR%\cfgs\default.yaml --data_dir %DATADIR% -b %EVAL_BATCHSIZE% --plots montage
 ```
 
+## Fine-tune DDMYY model on DC-1
+```
+set cexp=death-certificates-1
+python train.py ^
+--formatter dates_ddmyy ^
+--output %EXPDIR% ^
+--dataset %cexp% ^
+--experiment %cexp%-finetuned-ddmyy ^
+--config %EXPDIR%\cfgs\default.yaml ^
+--data_dir %DATADIR% ^
+--initial-checkpoint %EXPDIR%\split-ddmyy\last.pth.tar
+
+```
+
 ## Transfer learn on ATLASS
 Note relatively square image size often the case. Use 224x224
-
-### Random experiments for now
-To see if it works. Base LR for model without TL, LR TL from Danish Census small
-```
-set cexp=no_empty
-
-python -m torch.distributed.launch --nproc_per_node=2 train.py ^
---lr 0.5 ^
---input-size 3 224 224 ^
---experiment %cexp% ^
---output %EXPDIR%\atlass ^
---formatter dates_ddmyy ^
---dataset atlass ^
---data_dir %DATADIR% ^
---labels-subdir %cexp% ^
---config %EXPDIR%\cfgs\default.yaml ^
---initial-log
-
-python -m torch.distributed.launch --nproc_per_node=2 train.py ^
---lr 0.5 ^
---input-size 3 224 224 ^
---experiment %cexp%-no-pretrain ^
---output %EXPDIR%\atlass ^
---formatter dates_ddmyy ^
---dataset atlass ^
---data_dir %DATADIR% ^
---labels-subdir %cexp% ^
---config %EXPDIR%\cfgs\default-no-pretrained.yaml ^
---initial-log
-
-python -m torch.distributed.launch --nproc_per_node=2 train.py ^
---lr 0.0625 ^
---input-size 3 224 224 ^
---experiment %cexp%-tl ^
---output %EXPDIR%\atlass ^
---formatter dates_ddmyy ^
---initial-checkpoint %EXPDIR%\split-ddmyy\last.pth.tar ^
---dataset atlass ^
---data_dir %DATADIR% ^
---labels-subdir %cexp%  ^
---config %EXPDIR%\cfgs\default.yaml ^
---initial-log
-
-python -m torch.distributed.launch --nproc_per_node=2 train.py ^
---lr 0.0625 ^
---input-size 3 224 224 ^
---experiment %cexp%-tl-no-aug ^
---output %EXPDIR%\atlass ^
---formatter dates_ddmyy ^
---initial-checkpoint %EXPDIR%\split-ddmyy\last.pth.tar ^
---dataset atlass ^
---data_dir %DATADIR% ^
---labels-subdir %cexp%  ^
---config %EXPDIR%\cfgs\no-aug.yaml ^
---initial-log
-
-
-
-python -m torch.distributed.launch --nproc_per_node=2 train.py ^
---lr 0.001 ^
---input-size 3 224 224 ^
---experiment %cexp%-tl-no-aug-and-reg ^
---output %EXPDIR%\atlass ^
---formatter dates_ddmyy ^
---initial-checkpoint %EXPDIR%\split-ddmyy\last.pth.tar ^
---dataset atlass ^
---data_dir %DATADIR% ^
---labels-subdir %cexp%  ^
---config %EXPDIR%\cfgs\no-aug-and-reg.yaml ^
---initial-log
-
-```
-
-**TODO**: 
-1. Disable weight decay (probably does nothing). 
-1. Train fewer epochs, maybe 10,000 steps as in EffNetV2 paper.
-
 
 ### Tune LR
 Search for LR. NOTE: 2xGPU training. log2uniform distr.
