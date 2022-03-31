@@ -18,7 +18,7 @@ git clone https://github.com/TorbenSDJohansen/DARE
 
 Then prepare an environment (here using conda and the name `timmsn`):
 ```
-conda create -n DARE numpy pandas pillow scikit-learn tensorboard opencv matplotlib yaml
+conda create -n DARE numpy pandas pillow scikit-learn tensorboard opencv matplotlib pyyaml
 conda activate DARE
 conda install pytorch torchvision torchaudio cudatoolkit=11.3 -c pytorch
 pip install imutils timm=0.5.4
