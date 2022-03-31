@@ -1,4 +1,4 @@
-# DARE
+﻿# DARE
 Code related to the paper DARE: A large-scale handwritten DAte REcognition system by Christian M. Dahl, Torben Johansen, Emil N. Sørensen, Christian Westermann, and Simon Wittrock.
 
 - [Download Database](#download-database)
@@ -18,10 +18,10 @@ git clone https://github.com/TorbenSDJohansen/DARE
 
 Then prepare an environment (here using conda and the name `timmsn`):
 ```
-conda create -n timmsn numpy pandas pillow scikit-learn tensorboard opencv matplotlib
-conda activate timmsn
-conda install pytorch=1.9 torchvision=0.10 torchaudio cudatoolkit=10.2 -c pytorch
-pip install imutils timm
+conda create -n DARE numpy pandas pillow scikit-learn tensorboard opencv matplotlib
+conda activate DARE
+conda install pytorch torchvision torchaudio cudatoolkit=11.3 -c pytorch
+pip install imutils timm=0.5.4
 ```
 
 After making sure all dependencies are installed, use the following code to install `timmsn`.
