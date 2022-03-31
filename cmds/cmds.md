@@ -212,7 +212,7 @@ python -m torch.distributed.launch --nproc_per_node=2 train.py ^
 --config %EXPDIR%\cfgs\default.yaml
 
 python -m torch.distributed.launch --nproc_per_node=2 train.py ^
---lr 0.25 ^
+--lr 4.0 ^
 --input-size 3 224 224 ^
 --experiment %cexp% ^
 --output %EXPDIR%\atlass ^
