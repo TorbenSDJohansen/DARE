@@ -123,11 +123,22 @@ python predict.py --formatter dates_ddmyyyy --output Z:\faellesmappe\tsdj\DARE\p
 ## Fine-tune DDMYY model on DC-1
 ```
 set cexp=death-certificates-1
+
 python train.py ^
 --formatter dates_ddmyy ^
 --output %EXPDIR% ^
 --dataset %cexp% ^
 --experiment %cexp%-finetuned-ddmyy ^
+--config %EXPDIR%\cfgs\default.yaml ^
+--data_dir %DATADIR% ^
+--initial-checkpoint %EXPDIR%\split-ddmyy\last.pth.tar
+
+python train.py ^
+--lr 0.05 ^
+--formatter dates_ddmyy ^
+--output %EXPDIR% ^
+--dataset %cexp% ^
+--experiment %cexp%-finetuned-ddmyy-lr-0.05 ^
 --config %EXPDIR%\cfgs\default.yaml ^
 --data_dir %DATADIR% ^
 --initial-checkpoint %EXPDIR%\split-ddmyy\last.pth.tar
@@ -185,6 +196,44 @@ python -m torch.distributed.launch --nproc_per_node=2 train.py ^
 ```
 
 ### Train
+```
+set cexp=no_empty
+
+python -m torch.distributed.launch --nproc_per_node=2 train.py ^
+--lr 1.0 ^
+--input-size 3 224 224 ^
+--experiment %cexp%-tl ^
+--output %EXPDIR%\atlass ^
+--formatter dates_ddmyy ^
+--initial-checkpoint %EXPDIR%\split-ddmyy\last.pth.tar ^
+--dataset atlass ^
+--data_dir %DATADIR% ^
+--labels-subdir %cexp%  ^
+--config %EXPDIR%\cfgs\default.yaml
+
+python -m torch.distributed.launch --nproc_per_node=2 train.py ^
+--lr 0.25 ^
+--input-size 3 224 224 ^
+--experiment %cexp% ^
+--output %EXPDIR%\atlass ^
+--formatter dates_ddmyy ^
+--dataset atlass ^
+--data_dir %DATADIR% ^
+--labels-subdir %cexp%  ^
+--config %EXPDIR%\cfgs\default.yaml
+
+python -m torch.distributed.launch --nproc_per_node=2 train.py ^
+--lr 0.5 ^
+--input-size 3 224 224 ^
+--experiment %cexp%-no-pretrain ^
+--output %EXPDIR%\atlass ^
+--formatter dates_ddmyy ^
+--dataset atlass ^
+--data_dir %DATADIR% ^
+--labels-subdir %cexp%  ^
+--config %EXPDIR%\cfgs\default-no-pretrained.yaml
+
+```
 
 ### Evaluate
 
