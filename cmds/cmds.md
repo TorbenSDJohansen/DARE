@@ -236,6 +236,46 @@ python -m torch.distributed.launch --nproc_per_node=2 train.py ^
 ```
 
 ### Evaluate
+```
+set cexp=no_empty
+
+python evaluate.py ^
+--input-size 3 224 224 ^
+--output %EVALDIR%\atlass\%cexp%-tl ^
+--formatter dates_ddmyy ^
+--dataset atlass ^
+--data_dir %DATADIR% ^
+--labels-subdir %cexp%  ^
+--config %EXPDIR%\cfgs\default.yaml ^
+--plots montage cov-acc cer-acc ^
+--eval-plots-omit-most-occ 3 ^
+--checkpoint %EXPDIR%\atlass\%cexp%-tl\last.pth.tar
+
+python evaluate.py ^
+--input-size 3 224 224 ^
+--output %EVALDIR%\atlass\%cexp% ^
+--formatter dates_ddmyy ^
+--dataset atlass ^
+--data_dir %DATADIR% ^
+--labels-subdir %cexp%  ^
+--config %EXPDIR%\cfgs\default.yaml ^
+--plots montage cov-acc cer-acc ^
+--eval-plots-omit-most-occ 3 ^
+--checkpoint %EXPDIR%\atlass\%cexp%\last.pth.tar
+
+python evaluate.py ^
+--input-size 3 224 224 ^
+--output %EVALDIR%\atlass\%cexp%-no-pretrain ^
+--formatter dates_ddmyy ^
+--dataset atlass ^
+--data_dir %DATADIR% ^
+--labels-subdir %cexp%  ^
+--config %EXPDIR%\cfgs\default.yaml ^
+--plots montage cov-acc cer-acc ^
+--eval-plots-omit-most-occ 3 ^
+--checkpoint %EXPDIR%\atlass\%cexp%-no-pretrain\last.pth.tar
+
+```
 
 ## Transfer learn on Danish Census
 Note use of same input-size, seems ratio is OK
