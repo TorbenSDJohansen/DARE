@@ -80,6 +80,7 @@ python -m torch.distributed.launch --nproc_per_node=2 train.py ^
 for %i in (8.0, 4.0, 2.0, 1.0, 0.5, 0.25, 0.125) DO ^
 python -m torch.distributed.launch --nproc_per_node=2 train.py ^
 --lr %i ^
+--epochs 1000 ^
 --input-size 3 224 224 ^
 --experiment %cexp%-lr-%i ^
 --output %EXPDIR%\atlass\lr-search ^
@@ -92,6 +93,7 @@ python -m torch.distributed.launch --nproc_per_node=2 train.py ^
 for %i in (8.0, 4.0, 2.0, 1.0, 0.5, 0.25, 0.125) DO ^
 python -m torch.distributed.launch --nproc_per_node=2 train.py ^
 --lr %i ^
+--epochs 1000 ^
 --input-size 3 224 224 ^
 --experiment %cexp%-no-pretrain-lr-%i ^
 --output %EXPDIR%\atlass\lr-search ^
