@@ -108,7 +108,7 @@ Test also 250 epochs performance of models not TL from DARE (performance @ same 
 ```
 set cexp=no_empty
 
-for %i in (8.0, 4.0, 2.0, 1.0, 0.5, 0.25, 0.125) DO ^
+for %i in (4.0, 2.0, 1.0, 0.5, 0.25, 0.125) DO ^
 python -m torch.distributed.launch --nproc_per_node=2 train.py ^
 --lr %i ^
 --epochs 250 ^
