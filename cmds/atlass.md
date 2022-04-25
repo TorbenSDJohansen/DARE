@@ -60,7 +60,6 @@ python -m torch.distributed.launch --nproc_per_node=2 train.py ^
 ### Tune LR
 Search for LR. NOTE: 2xGPU training. log2uniform distr.
 
-**TODO**: Tune epochs
 ```
 set cexp=no_empty
 
@@ -96,6 +95,38 @@ python -m torch.distributed.launch --nproc_per_node=2 train.py ^
 --epochs 1000 ^
 --input-size 3 224 224 ^
 --experiment %cexp%-no-pretrain-lr-%i ^
+--output %EXPDIR%\atlass\lr-search ^
+--formatter dates_ddmyy ^
+--dataset atlass ^
+--data_dir %DATADIR% ^
+--labels-subdir %cexp%  ^
+--config %EXPDIR%\cfgs\default-no-pretrained.yaml
+
+```
+
+Test also 250 epochs performance of models not TL from DARE (performance @ same computation).
+```
+set cexp=no_empty
+
+for %i in (8.0, 4.0, 2.0, 1.0, 0.5, 0.25, 0.125) DO ^
+python -m torch.distributed.launch --nproc_per_node=2 train.py ^
+--lr %i ^
+--epochs 250 ^
+--input-size 3 224 224 ^
+--experiment %cexp%-lr-%i-epoch-250 ^
+--output %EXPDIR%\atlass\lr-search ^
+--formatter dates_ddmyy ^
+--dataset atlass ^
+--data_dir %DATADIR% ^
+--labels-subdir %cexp%  ^
+--config %EXPDIR%\cfgs\default.yaml
+
+for %i in (8.0, 4.0, 2.0, 1.0, 0.5, 0.25, 0.125) DO ^
+python -m torch.distributed.launch --nproc_per_node=2 train.py ^
+--lr %i ^
+--epochs 250 ^
+--input-size 3 224 224 ^
+--experiment %cexp%-no-pretrain-lr-%i-epoch-250 ^
 --output %EXPDIR%\atlass\lr-search ^
 --formatter dates_ddmyy ^
 --dataset atlass ^
