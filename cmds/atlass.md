@@ -142,9 +142,9 @@ python -m torch.distributed.launch --nproc_per_node=2 train.py ^
 set cexp=no_empty
 
 python -m torch.distributed.launch --nproc_per_node=2 train.py ^
---lr 1.0 ^
+--lr 0.25 ^
 --input-size 3 224 224 ^
---experiment %cexp%-tl ^
+--experiment %cexp%-tl-lr-0.25-epoch-250 ^
 --output %EXPDIR%\atlass ^
 --formatter dates_ddmyy ^
 --initial-checkpoint %EXPDIR%\split-ddmyy\last.pth.tar ^
@@ -154,9 +154,10 @@ python -m torch.distributed.launch --nproc_per_node=2 train.py ^
 --config %EXPDIR%\cfgs\default.yaml
 
 python -m torch.distributed.launch --nproc_per_node=2 train.py ^
---lr 4.0 ^
+--lr 2.0 ^
+--epochs 250 ^
 --input-size 3 224 224 ^
---experiment %cexp% ^
+--experiment %cexp%-lr-2.0-epoch-250 ^
 --output %EXPDIR%\atlass ^
 --formatter dates_ddmyy ^
 --dataset atlass ^
@@ -166,8 +167,9 @@ python -m torch.distributed.launch --nproc_per_node=2 train.py ^
 
 python -m torch.distributed.launch --nproc_per_node=2 train.py ^
 --lr 0.5 ^
+--epochs 1000 ^
 --input-size 3 224 224 ^
---experiment %cexp%-no-pretrain ^
+--experiment %cexp%-no-pretrain-lr-0.5-epoch-1000 ^
 --output %EXPDIR%\atlass ^
 --formatter dates_ddmyy ^
 --dataset atlass ^
@@ -180,10 +182,12 @@ python -m torch.distributed.launch --nproc_per_node=2 train.py ^
 ### Evaluate
 ```
 set cexp=no_empty
+set models=(tl-lr-0.25-epoch-250, no-pretrain-lr-0.5-epoch-1000, lr-2.0-epoch-250)
 
+for %i in %models% DO ^
 python evaluate.py ^
 --input-size 3 224 224 ^
---output %EVALDIR%\atlass\%cexp%-tl ^
+--output %EVALDIR%\atlass\%cexp%-%i ^
 --formatter dates_ddmyy ^
 --dataset atlass ^
 --data_dir %DATADIR% ^
@@ -191,31 +195,7 @@ python evaluate.py ^
 --config %EXPDIR%\cfgs\default.yaml ^
 --plots montage cov-acc cer-acc ^
 --eval-plots-omit-most-occ 3 ^
---checkpoint %EXPDIR%\atlass\%cexp%-tl\last.pth.tar
-
-python evaluate.py ^
---input-size 3 224 224 ^
---output %EVALDIR%\atlass\%cexp% ^
---formatter dates_ddmyy ^
---dataset atlass ^
---data_dir %DATADIR% ^
---labels-subdir %cexp%  ^
---config %EXPDIR%\cfgs\default.yaml ^
---plots montage cov-acc cer-acc ^
---eval-plots-omit-most-occ 3 ^
---checkpoint %EXPDIR%\atlass\%cexp%\last.pth.tar
-
-python evaluate.py ^
---input-size 3 224 224 ^
---output %EVALDIR%\atlass\%cexp%-no-pretrain ^
---formatter dates_ddmyy ^
---dataset atlass ^
---data_dir %DATADIR% ^
---labels-subdir %cexp%  ^
---config %EXPDIR%\cfgs\default.yaml ^
---plots montage cov-acc cer-acc ^
---eval-plots-omit-most-occ 3 ^
---checkpoint %EXPDIR%\atlass\%cexp%-no-pretrain\last.pth.tar
+--checkpoint %EXPDIR%\atlass\%cexp%-%i\last.pth.tar
 
 ```
 
