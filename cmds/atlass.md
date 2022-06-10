@@ -137,7 +137,6 @@ python -m torch.distributed.launch --nproc_per_node=2 train.py ^
 ```
 
 ### Train
-**TODO**: Fix LR, epochs
 ```
 set cexp=no_empty
 
