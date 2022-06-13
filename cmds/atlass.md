@@ -215,7 +215,7 @@ python -m torch.distributed.launch --nproc_per_node=2 train.py ^
 
 ```
 
-**TODO**: Test also TL from 5 individual dataset DARE models. For DC models, drop heads
+Test also TL from 5 individual dataset DARE models. For DC models, drop heads
 ```
 python -m torch.distributed.launch --nproc_per_node=2 train.py ^
 --lr 2.0 ^
@@ -284,7 +284,7 @@ python -m torch.distributed.launch --nproc_per_node=2 train.py ^
 ### Evaluate
 ```
 set cexp=no_empty
-set models=(tl-lr-0.25-epoch-250, no-pretrain-lr-0.5-epoch-1000, lr-2.0-epoch-250)
+set models=(tl-lr-0.25-epoch-250, no-pretrain-lr-0.5-epoch-1000, lr-2.0-epoch-250, tl-death-certificates-1-lr-2.0, tl-death-certificates-2-lr-0.25, tl-police-register-sheets-1-lr-0.125, tl-police-register-sheets-2-lr-0.25, tl-swedish-records-birth-dates-lr-1.0)
 
 for %i in %models% DO ^
 python evaluate.py ^
@@ -300,5 +300,3 @@ python evaluate.py ^
 --checkpoint %EXPDIR%\atlass\%cexp%-%i\last.pth.tar
 
 ```
-
-**TODO**: Add models TL from single DARE dataset
