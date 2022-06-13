@@ -136,6 +136,41 @@ python -m torch.distributed.launch --nproc_per_node=2 train.py ^
 
 ```
 
+Test also TL from 5 individual dataset DARE models. For DC models, drop heads
+```
+set cexp=no_empty
+
+for %j in (death-certificates-1, death-certificates-2) DO ^
+for %i in (2.0, 1.0, 0.5, 0.25, 0.125, 0.0625, 0.03125, 0.015625) DO ^
+python -m torch.distributed.launch --nproc_per_node=2 train.py ^
+--lr %i ^
+--input-size 3 224 224 ^
+--experiment %cexp%-tl-%j-lr-%i ^
+--output %EXPDIR%\atlass\lr-search ^
+--formatter dates_ddmyy ^
+--initial-checkpoint %EXPDIR%\%j\last.pth.tar ^
+--dataset atlass ^
+--data_dir %DATADIR% ^
+--labels-subdir %cexp%  ^
+--config %EXPDIR%\cfgs\default.yaml ^
+--drop-modules classifier*
+
+for %j in (police-register-sheets-1, police-register-sheets-2, swedish-records-birth-dates) DO ^
+for %i in (2.0, 1.0, 0.5, 0.25, 0.125, 0.0625, 0.03125, 0.015625) DO ^
+python -m torch.distributed.launch --nproc_per_node=2 train.py ^
+--lr %i ^
+--input-size 3 224 224 ^
+--experiment %cexp%-tl-%j-lr-%i ^
+--output %EXPDIR%\atlass\lr-search ^
+--formatter dates_ddmyy ^
+--initial-checkpoint %EXPDIR%\%j\last.pth.tar ^
+--dataset atlass ^
+--data_dir %DATADIR% ^
+--labels-subdir %cexp%  ^
+--config %EXPDIR%\cfgs\default.yaml
+
+```
+
 ### Train
 ```
 set cexp=no_empty
@@ -178,6 +213,8 @@ python -m torch.distributed.launch --nproc_per_node=2 train.py ^
 
 ```
 
+**TODO**: Add models TL from single DARE dataset
+
 ### Evaluate
 ```
 set cexp=no_empty
@@ -198,3 +235,4 @@ python evaluate.py ^
 
 ```
 
+**TODO**: Add models TL from single DARE dataset
