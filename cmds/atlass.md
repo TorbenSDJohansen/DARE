@@ -171,6 +171,8 @@ python -m torch.distributed.launch --nproc_per_node=2 train.py ^
 
 ```
 
+**NOTE**: For DC-1, a run with lr == 4.0 started, as the best former was 2.0, which was a border point
+
 ### Train
 ```
 set cexp=no_empty
@@ -213,7 +215,71 @@ python -m torch.distributed.launch --nproc_per_node=2 train.py ^
 
 ```
 
-**TODO**: Add models TL from single DARE dataset
+**TODO**: Test also TL from 5 individual dataset DARE models. For DC models, drop heads
+```
+python -m torch.distributed.launch --nproc_per_node=2 train.py ^
+--lr 2.0 ^
+--input-size 3 224 224 ^
+--experiment %cexp%-tl-death-certificates-1-lr-2.0 ^
+--output %EXPDIR%\atlass\lr-search ^
+--formatter dates_ddmyy ^
+--initial-checkpoint %EXPDIR%\death-certificates-1\last.pth.tar ^
+--dataset atlass ^
+--data_dir %DATADIR% ^
+--labels-subdir %cexp%  ^
+--config %EXPDIR%\cfgs\default.yaml ^
+--drop-modules classifier*
+
+python -m torch.distributed.launch --nproc_per_node=2 train.py ^
+--lr 0.25 ^
+--input-size 3 224 224 ^
+--experiment %cexp%-tl-death-certificates-2-lr-0.25 ^
+--output %EXPDIR%\atlass\lr-search ^
+--formatter dates_ddmyy ^
+--initial-checkpoint %EXPDIR%\death-certificates-2\last.pth.tar ^
+--dataset atlass ^
+--data_dir %DATADIR% ^
+--labels-subdir %cexp%  ^
+--config %EXPDIR%\cfgs\default.yaml ^
+--drop-modules classifier*
+
+python -m torch.distributed.launch --nproc_per_node=2 train.py ^
+--lr 0.125 ^
+--input-size 3 224 224 ^
+--experiment %cexp%-tl-police-register-sheets-1-lr-0.125 ^
+--output %EXPDIR%\atlass\lr-search ^
+--formatter dates_ddmyy ^
+--initial-checkpoint %EXPDIR%\police-register-sheets-1\last.pth.tar ^
+--dataset atlass ^
+--data_dir %DATADIR% ^
+--labels-subdir %cexp%  ^
+--config %EXPDIR%\cfgs\default.yaml
+
+python -m torch.distributed.launch --nproc_per_node=2 train.py ^
+--lr 0.25 ^
+--input-size 3 224 224 ^
+--experiment %cexp%-tl-police-register-sheets-2-lr-0.25 ^
+--output %EXPDIR%\atlass\lr-search ^
+--formatter dates_ddmyy ^
+--initial-checkpoint %EXPDIR%\police-register-sheets-2\last.pth.tar ^
+--dataset atlass ^
+--data_dir %DATADIR% ^
+--labels-subdir %cexp%  ^
+--config %EXPDIR%\cfgs\default.yaml
+
+python -m torch.distributed.launch --nproc_per_node=2 train.py ^
+--lr 1.0 ^
+--input-size 3 224 224 ^
+--experiment %cexp%-tl-swedish-records-birth-dates-lr-1.0 ^
+--output %EXPDIR%\atlass\lr-search ^
+--formatter dates_ddmyy ^
+--initial-checkpoint %EXPDIR%\swedish-records-birth-dates\last.pth.tar ^
+--dataset atlass ^
+--data_dir %DATADIR% ^
+--labels-subdir %cexp%  ^
+--config %EXPDIR%\cfgs\default.yaml
+
+```
 
 ### Evaluate
 ```
