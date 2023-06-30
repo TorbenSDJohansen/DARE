@@ -61,7 +61,7 @@ except AttributeError:
     pass
 
 
-warnings.filterwarnings('always', category=DeprecationWarning)
+warnings.filterwarnings('always', category=DeprecationWarning, module='timmsn')
 torch.backends.cudnn.benchmark = True
 _logger = logging.getLogger('inference') # pylint: disable=C0103
 

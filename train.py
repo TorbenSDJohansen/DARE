@@ -97,7 +97,7 @@ except ImportError:
     has_wandb = False # pylint: disable=C0103
 
 
-warnings.filterwarnings('always', category=DeprecationWarning)
+warnings.filterwarnings('always', category=DeprecationWarning, module='timmsn')
 torch.backends.cudnn.benchmark = True
 _logger = logging.getLogger('train') # pylint: disable=C0103
 
