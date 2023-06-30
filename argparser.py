@@ -6,6 +6,11 @@
 # pylint: disable=C0301
 
 import argparse
+import os
+
+from typing import Tuple
+
+import yaml
 
 
 HELP_STR_DATASET_STRUCTURE = '''Dataset can be structured these ways:
@@ -66,11 +71,10 @@ def construct_parser(): # pylint: disable=R0915
                         help='YAML config file specifying default arguments')
 
     parser = argparse.ArgumentParser(
-        description='PyTorch ImageNet Training') # pylint: disable=C0103
+        description='PyTorch SeqNet Training') # pylint: disable=C0103
 
     # Dataset
-    parser.add_argument('--data_dir', '-datadir', metavar='DIR',
-                        default='',
+    parser.add_argument('--data_dir', '-datadir', metavar='DIR', default='',
                         help='path to dataset')
     parser.add_argument('--dataset', '-d', metavar='NAME(s)', default='', nargs='+',
                         help='dataset name(s), i.e. name of folder within data_dir')
@@ -85,6 +89,14 @@ def construct_parser(): # pylint: disable=R0915
 
     parser.add_argument('--labels-subdir', type=str, nargs='+', default='',
                         help='For each dataset, specify name of subdir inside labels/ (default: do not use subdirs)')
+
+    # Options to predict directly on folders
+    parser.add_argument('--predict-folders', type=str, nargs='+', default=None,
+                        help='Overwrite normal setup and predict on explicitly chosen folders. Tarballs (.tar.gz) allowed.')
+    parser.add_argument('--predict-on-subfolders', default=False, action='store_true',
+                        help='Extend --predict-folders to subfolders of all folders.')
+    parser.add_argument('--keep-unpacked', default=False, action='store_true',
+                        help='When predicting on, e.g., tarballs, do not delete unpacked folders.')
 
     parser.add_argument('--train-split', metavar='NAME', default='train',
                         help='dataset train split (default: train)')
@@ -142,8 +154,8 @@ def construct_parser(): # pylint: disable=R0915
                         help='Gradient clipping mode. One of ("norm", "value", "agc")')
 
     # Learning rate schedule parameters
-    parser.add_argument('--sched', default='step', type=str, metavar='SCHEDULER',
-                        help='LR scheduler (default: "step"')
+    parser.add_argument('--sched', default='cosine', type=str, metavar='SCHEDULER',
+                        help='LR scheduler (default: "cosine"')
     parser.add_argument('--lr', type=float, default=0.01, metavar='LR',
                         help='learning rate (default: 0.01)')
     parser.add_argument('--lr-noise', type=float, nargs='+', default=None, metavar='pct, pct',
@@ -156,21 +168,21 @@ def construct_parser(): # pylint: disable=R0915
                         help='learning rate cycle len multiplier (default: 1.0)')
     parser.add_argument('--lr-cycle-limit', type=int, default=1, metavar='N',
                         help='learning rate cycle limit')
-    parser.add_argument('--warmup-lr', type=float, default=0.0001, metavar='LR',
+    parser.add_argument('--warmup-lr', type=float, default=1e-6, metavar='LR',
                         help='warmup learning rate (default: 0.0001)')
     parser.add_argument('--min-lr', type=float, default=1e-5, metavar='LR',
                         help='lower lr bound for cyclic schedulers that hit 0 (1e-5)')
     parser.add_argument('--epochs', type=int, default=200, metavar='N',
-                        help='number of epochs to train (default: 2)')
+                        help='number of epochs to train (default: 200)')
     parser.add_argument('--epoch-repeats', type=float, default=0., metavar='N',
                         help='epoch repeat multiplier (number of times to repeat dataset epoch per train epoch).')
     parser.add_argument('--start-epoch', default=None, type=int, metavar='N',
                         help='manual epoch number (useful on restarts)')
     parser.add_argument('--decay-epochs', type=float, default=30, metavar='N',
                         help='epoch interval to decay LR')
-    parser.add_argument('--warmup-epochs', type=int, default=3, metavar='N',
+    parser.add_argument('--warmup-epochs', type=int, default=5, metavar='N',
                         help='epochs to warmup LR, if scheduler supports')
-    parser.add_argument('--cooldown-epochs', type=int, default=10, metavar='N',
+    parser.add_argument('--cooldown-epochs', type=int, default=0, metavar='N',
                         help='epochs to cooldown LR at min_lr, after cyclic schedule ends')
     parser.add_argument('--patience-epochs', type=int, default=10, metavar='N',
                         help='patience epochs for Plateau LR scheduler (default: 10')
@@ -184,7 +196,7 @@ def construct_parser(): # pylint: disable=R0915
                         help='Random resize scale (default: 0.08 1.0)')
     parser.add_argument('--ratio', type=float, nargs='+', default=[3./4., 4./3.], metavar='RATIO',
                         help='Random resize aspect ratio (default: 0.75 1.33)')
-    parser.add_argument('--hflip', type=float, default=0.5,
+    parser.add_argument('--hflip', type=float, default=0.0,
                         help='Horizontal flip training aug probability')
     parser.add_argument('--vflip', type=float, default=0.,
                         help='Vertical flip training aug probability')
@@ -265,11 +277,7 @@ def construct_parser(): # pylint: disable=R0915
     parser.add_argument('--save-images', action='store_true', default=False,
                         help='save images of input bathes every log interval for debugging')
     parser.add_argument('--amp', action='store_true', default=False,
-                        help='use NVIDIA Apex AMP or Native AMP for mixed precision training')
-    parser.add_argument('--apex-amp', action='store_true', default=False,
-                        help='Use NVIDIA Apex AMP mixed precision')
-    parser.add_argument('--native-amp', action='store_true', default=False,
-                        help='Use Native Torch AMP mixed precision')
+                        help='Use Native AMP for mixed precision training')
     parser.add_argument('--channels-last', action='store_true', default=False,
                         help='Use channels_last memory layout')
     parser.add_argument('--pin-mem', action='store_true', default=False,
@@ -291,6 +299,8 @@ def construct_parser(): # pylint: disable=R0915
                         help='convert model torchscript for inference')
     parser.add_argument('--log-wandb', action='store_true', default=False,
                         help='log training and validation metrics to wandb')
+    parser.add_argument('--wandb-project-prefix', type=str, default='',
+                        help='W&B project name will be prefixed by value')
 
     # Not for training - to harmonize train and evaluate scripts.
     parser.add_argument('--checkpoint', default='', type=str, metavar='PATH', # --resume and --checkpoint could be merged
@@ -307,41 +317,98 @@ def construct_parser(): # pylint: disable=R0915
                         help='Use Tensorflow preprocessing pipeline (require CPU TF installed')
     parser.add_argument('--class-map', default='', type=str, metavar='FILENAME',
                         help='path to class to idx mapping file (default: "")')
-    # parser.add_argument('--valid-labels', default='', type=str, metavar='FILENAME', # TODO delete?
-    #                     help='Valid label indices txt file for validation of partial label space')
-    # parser.add_argument('--real-labels', default='', type=str, metavar='FILENAME', # TODO delete?
-    #                     help='Real labels JSON file for imagenet evaluation')
 
     # Extensions
-    parser.add_argument('--sequence-model', action='store_true', default=True, # TODO Instead of arg, consider make case always
-                        help='Use sequence model, loss, accuracy, etc. Use with sequence data.')
     parser.add_argument('--resize-method', default='resize', type=str,
                         help='Replace initial transform(s) with other resize method.')
     parser.add_argument('--return-individual-probs', action='store_true', default=False,
                         help='Return prob. of each element in sequence when predicting.')
+    parser.add_argument('--retrieve-all-probs', action='store_true', default=False,
+                        help='Return prob. of each candidate element for each element in sequence when predicting.')
     parser.add_argument('--initial-log', action='store_true', default=False,
                         help='Whether to perform initial save of train and eval images.')
     parser.add_argument('--plots', type=str, nargs='+', default=None, choices=['montage', 'cov-acc', 'cer-acc'],
                         help='Which plots to make when evaluating (for montage, also predict).')
     parser.add_argument('--eval-plots-omit-most-occ', type=int, default=0,
                         help='Perform eval cer/acc and cov/acc plots with omitting most k common classes (of labels).')
-    # TODO --from-experiment: Load settings from experiment, and let checkpoint
-    # be the last.pth.tar. This is mostly similar to --config. Useful to test,
-    # predict. Maybe also for training, where in this cast last.pth.tar will be
-    # used as --resume. (note args.yaml then used for args)
     parser.add_argument('--evalset', default='test', type=str, # TODO remove and use --val-split instead? Needs to be ok w/ "train-split-0.05"-style
-                        help='How to construct evaluation data when training, e.g., "test" or "train-split-0.05" for 5% of training data.')  # TODO change "train-split-0.05" style to "--val-split test[:50%]" style, see https://github.com/rwightman/pytorch-image-models/discussions/973
+                        help='How to construct evaluation data when training, e.g., "test" or "train-split-0.05" for 5 percent of training data.')  # TODO change "train-split-0.05" style to "--val-split test[:50%]" style, see https://github.com/rwightman/pytorch-image-models/discussions/973
     parser.add_argument('--data-split', default=None, type=str, choices=['train', 'test', 'predict'],
                         help='Explicitly choose train/test/predict dataset. Default to appropriate (train to train, etc.)')
-    parser.add_argument('--formatter', default=None, type=str,
-                        help='Choose a formatter. Dataset default otherwise used if using a bdatasets dataset.')
+    parser.add_argument('--formatter', default='anyascii', type=str,
+                        help='Formatter to map labels from text to seq. of integers. Default: Any ASCII + æøåÆØÅ, with max. len. 40')
     parser.add_argument('--formatter-kwargs', default=None, type=str,
-                        help=(
-                            'Provide **kwargs for formatter construction, which is needed in some cases. ',
+                        help=' '.join((
+                            'Provide **kwargs for formatter construction, which is needed in some cases.',
                             'This should be provided in the form "kwarg1=XX:kwarg2=YY", i.e. : seperated.'
-                            )
-                        )
+                            )))
     parser.add_argument('--sqnet-version', type=str, default='v2', choices=['v1', 'v2'], # TODO raise depreated warning if v1
                         help='SequenceNet version to base sequence model on.')
+    parser.add_argument('--skip-validate', action='store_true', default=False,
+                        help='Skip validation during training.')
+    parser.add_argument('--classifier', type=str, default='multi_head',
+                        help='Classifier choice, see timmsn.models.list_classifiers()')
+    parser.add_argument('--ctc', action='store_true', default=False, help='Use CTC loss, method to predict, etc.')
+    parser.add_argument('--seq2seq', action='store_true', default=False, help='Use Seq2Seq loss, method to predict, etc.')
+    parser.add_argument('--decoder', type=str, default=None, help='Type of decoder (e.g., greedy, beam-X (X is int and controls beam size) to use for evalution, prediction for autoregressive models.')
+    parser.add_argument('--tl-from-input-size', type=int, nargs='+', default=None,
+                        help='When using --initial-checkpoint and TL to other image size with ViT-style model, pass original input size to allow proper resizing of positional embedding.')
+
+    parser.add_argument('--read-from-tar', action='store_true', default=False,
+                        help='Read images from .tar file "minipics.tar" instead of from folder "minipics/"')
+
+    # TODO filetypes (perhaps see BYU projects, might be something there to grab)
 
     return config_parser, parser
+
+
+def _search_config(parser: argparse.ArgumentParser) -> str:
+    args = parser.parse_args()
+
+    if not (args.checkpoint or args.output):
+        return ''
+
+    args_checkpoint = os.path.join(
+        os.path.dirname(args.checkpoint), 'args.yaml',
+        )
+    args_output = os.path.join(args.output, args.experiment, 'args.yaml')
+
+    if os.path.isfile(args_checkpoint) and os.path.isfile(args_output):
+        return ''
+
+    if os.path.isfile(args_checkpoint):
+        print(f'--config not specified but able to infer from --checkpoint; using {args_checkpoint}')
+        return args_checkpoint
+
+    if os.path.isfile(args_output):
+        print(f'--config not specified but able to infer from --output and --experiment; using {args_output}')
+        return args_output
+
+    return ''
+
+
+def _load_defaults_from_config(config: str, parser: argparse.Namespace):
+    with open(config, 'r') as f: # pylint: disable=C0103, W1514
+        cfg = yaml.safe_load(f)
+        parser.set_defaults(**cfg)
+
+
+def parse_args() -> Tuple[argparse.Namespace, str]: # pylint: disable=C0116
+    config_parser, parser = construct_parser()
+    # Do we have a config file to parse?
+    args_config, remaining = config_parser.parse_known_args()
+    if args_config.config:
+        _load_defaults_from_config(args_config.config, parser)
+    else:
+        config = _search_config(parser)
+        if config:
+            _load_defaults_from_config(config, parser)
+
+    # The main arg parser parses the rest of the args, the usual
+    # defaults will have been overridden if config file specified.
+    args = parser.parse_args(remaining)
+
+    # Cache the args as a text string to save them in the output dir later
+    args_text = yaml.safe_dump(args.__dict__, default_flow_style=False)
+
+    return args, args_text
