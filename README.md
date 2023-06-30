@@ -19,14 +19,15 @@ Then prepare an environment (here using conda and the name `timmsn`):
 ```
 conda create -n DARE numpy pandas pillow scikit-learn tensorboard opencv matplotlib pyyaml
 conda activate DARE
-conda install pytorch=1.9 torchvision=0.10 torchaudio cudatoolkit=10.2 -c pytorch
-pip install imutils timm=0.5.4
+conda install pytorch==1.11.0 torchvision==0.12.0 torchaudio==0.11.0 cudatoolkit=11.3 -c pytorch
+pip install imutils timm=0.6.7
 ```
 
 After making sure all dependencies are installed, use the following code to install `timmsn`.
 ```
 pip install path/to/timm-sequence-net
 ```
+**Note**: `timmsn=0.2.5` used.
 
 ### Model Zoo
 
