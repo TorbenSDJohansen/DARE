@@ -18,7 +18,7 @@ set DDM_DATASETS=(cihvr, funeral-records, swedish-records-death-dates)
 
 set EVAL_BATCHSIZE=2048
 ```
-**Note**: Need to change `DATA_DIR` to match where the DARE database is saved and `EXPDIR` and `EVALDIR` to desired paths for models and evaluation results, respectively.
+**Note**: Need to change `DATA_DIR` to match where the DARE database is stored and `EXPDIR` and `EVALDIR` to desired paths for models and evaluation results, respectively.
 
 ## Train
 
