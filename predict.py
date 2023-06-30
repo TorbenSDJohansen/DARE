@@ -100,7 +100,7 @@ def main(): # pylint: disable=R0914, R0912, R0915
             formatter_kwargs=args.formatter_kwargs,
             )
     else:
-        if args.dataset.startswith('synthetic'):
+        if isinstance(args.dataset, str) and args.dataset.startswith('synthetic'):
             raise ValueError('Predict does not support synthetic dataset, but got {args.dataset}')
 
         setup_fn = setup_tarball_parser if args.read_from_tar else setup_sqnet_parser

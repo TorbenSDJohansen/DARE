@@ -101,7 +101,7 @@ def validate(args): # pylint: disable=C0116, R0914, R0912, R0915
     if args.formatter is None:
         raise ValueError('Must provide value for option --formatter.')
 
-    if args.dataset.startswith('synthetic'):
+    if isinstance(args.dataset, str) and args.dataset.startswith('synthetic'):
         setup_fn = setup_synthetic_parser
     elif args.read_from_tar:
         setup_fn = setup_tarball_parser

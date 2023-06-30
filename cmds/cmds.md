@@ -101,7 +101,7 @@ for %i in %ALL_DATASETS% DO python evaluate.py --formatter legacy.dates_ddmyyyy 
 ### Split ddmyy
 ```
 set cexp=split-ddmyy
-python evaluate.py --formatter legacy.dates_ddmyy --output %EVALDIR%\%cexp%\%cexp% --dataset %DDMYY_DATASETS_FLAT% --checkpoint %EXPDIR%\%cexp%\last.pth.tar --config cfgs/efficientnetv2_s.yamll --data_dir %DATADIR% -b %EVAL_BATCHSIZE% --plots montage cov-acc cer-acc
+python evaluate.py --formatter legacy.dates_ddmyy --output %EVALDIR%\%cexp%\%cexp% --dataset %DDMYY_DATASETS_FLAT% --checkpoint %EXPDIR%\%cexp%\last.pth.tar --config cfgs/efficientnetv2_s.yaml --data_dir %DATADIR% -b %EVAL_BATCHSIZE% --plots montage cov-acc cer-acc
 
 for %i in %DDMYY_DATASETS% DO python evaluate.py --formatter legacy.dates_ddmyy --output %EVALDIR%\%i\%cexp% --dataset %i --checkpoint %EXPDIR%\%cexp%\last.pth.tar --config cfgs/efficientnetv2_s.yaml --data_dir %DATADIR% -b %EVAL_BATCHSIZE% --plots montage cov-acc cer-acc
 ```
