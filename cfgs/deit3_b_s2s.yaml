@@ -115,7 +115,7 @@ use_multi_epochs_loader: false
 val_split: validation
 validation_batch_size_multiplier: 1
 vflip: 0.0
-wandb_project_prefix: ''
+wandb_project_prefix: DARE-
 warmup_epochs: 5
 warmup_lr: 1.0e-06
 weight_decay: 0.02
