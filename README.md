@@ -32,6 +32,7 @@ pip install path/to/timm-sequence-net
 ### Model Zoo
 
 ## Replicate Results
+You can find code to replicate all results in [cmds/cmds.md](cmds/cmds.md) and [cmds/atlass.md](cmds/atlass.md).
 
 ## License
 
