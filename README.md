@@ -15,7 +15,7 @@ To get started, first clone the repository locally:
 git clone https://github.com/TorbenSDJohansen/DARE
 ```
 
-Then prepare an environment (here using conda and the name `timmsn`):
+Then prepare an environment (here using conda and the name `DARE`):
 ```
 conda create -n DARE numpy pandas pillow scikit-learn tensorboard opencv matplotlib pyyaml
 conda activate DARE
