@@ -30,6 +30,19 @@ pip install path/to/timm-sequence-net
 **Note**: `timmsn=0.2.5` used.
 
 ### Model Zoo
+Our trained models are available for download:
+
+<details>
+
+<summary>
+**Temporary template**: Table with DC-1 results, including models and URLs
+</summary>
+
+| model    | Sequence          | SeqAcc        | DayAcc | MonthAcc | YearAcc      | url |                                                                           |
+| ---      | ---               | ---           | ---    | ---      | ---          | ---                                                                             |
+| M-DC-1   | DD-M-YY(YY)       | 97.5 (97.3)   | 99.2   | 98.8     | 99.4 (00.2)  | [model](https://www.dropbox.com/s/vwba88pta7qc2qr/hana-last-name.pt?dl=1)       |
+
+</details>
 
 ## Replicate Results
 You can find code to replicate all results in [cmds/cmds.md](cmds/cmds.md) and [cmds/atlass.md](cmds/atlass.md).
