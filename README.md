@@ -35,12 +35,12 @@ Our trained models are available for download:
 <details>
 
 <summary>
-**Temporary template**: Table with DC-1 results, including models and URLs
+(Temporary template) Table with DC-1 results, including models and URLs
 </summary>
 
-| model    | Sequence          | SeqAcc        | DayAcc | MonthAcc | YearAcc      | url |                                                                           |
+| model    | Sequence          | SeqAcc        | DayAcc | MonthAcc | YearAcc      | url                                                                             |
 | ---      | ---               | ---           | ---    | ---      | ---          | ---                                                                             |
-| M-DC-1   | DD-M-YY(YY)       | 97.5 (97.3)   | 99.2   | 98.8     | 99.4 (00.2)  | [model](https://www.dropbox.com/s/vwba88pta7qc2qr/hana-last-name.pt?dl=1)       |
+| M-DC-1   | DD-M-YY(YY)       | 97.5 (97.3)   | 99.2   | 98.8     | 99.4 (00.2)  | TODO                                                                            |
 
 </details>
 
