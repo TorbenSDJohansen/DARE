@@ -52,7 +52,6 @@ Single-dataset models
 | M-NHVD   | DD-M              | 97.5          | 98.1   | 98.9     |              | [model](https://www.dropbox.com/scl/fi/yjlvuvf5ziu52tqz9nax4/cihvr.pth.tar?rlkey=5srdidk01p2egklbklqfhots5&dl=0)                                                                             |
 | M-SWE-DD | DD-M              | 99.4          | 99.5   | 99.7     |              | [model](https://www.dropbox.com/scl/fi/8m616t6zt7f1ehdm8cpny/swedish-records-death-dates.pth.tar?rlkey=09ydt5bj409hfb5xpy6xb9bgx&dl=0)                                                                             |
 
-
 </details>
 
 <details>
@@ -71,12 +70,32 @@ Multi-dataset models
 
 </details>
 
+</details>
+
+<details>
+
+<summary>
+Swedish gradesheets transfer learning models
+</summary>
+
+| Pretrained  | Sequence | SecAcc | TL Gain  | Error Rate Reduction | url       |
+| ---         | ---      | ---    | ---      | ---                  | ---       |
+| No          | DD-M-YY  | 85.2   |          |                      | [model](https://www.dropbox.com/scl/fi/fj78bmrb1dpcl7833xh81/atlass-no-pretrain.pth.tar?rlkey=d3a2m5nlkz6ki3xyax13oml9s&dl=0) |
+| ImageNet21k | DD-M-YY  | 93.4   | + 8.2    | - 55.4               | [model](https://www.dropbox.com/scl/fi/2lcxk8nbl007xhdp75ksr/atlass-IN21k.pth.tar?rlkey=u6kr0fa7q2mqfcj3x2dampslu&dl=0) |
+| M-DC-1      | DD-M-YY  | 95.2   | + 10.0   | - 67.6               | [model](https://www.dropbox.com/scl/fi/zk9422ufkzaase9gxz2bq/atlass-death-certificates-1.pth.tar?rlkey=ogs0pl7fa0gdnau4izk33ma8h&dl=0) |
+| M-PR-2      | DD-M-YY  | 95.4   | + 10.2   | - 68.9               | [model](https://www.dropbox.com/scl/fi/23umr7hkve8d3l4pw0kny/atlass-police-register-sheets-2.pth.tar?rlkey=69zwf92huowvikui97gjwn608&dl=0) |
+| M-DC-2      | DD-M-YY  | 95.6   | + 10.4   | - 70.5               | [model](https://www.dropbox.com/scl/fi/1848ha39adzfl2cve90xp/atlass-death-certificates-2.pth.tar?rlkey=2uf2o5ka8vkgrl0abx8qobs9q&dl=0) |
+| M-SWE-BD    | DD-M-YY  | 95.6   | + 10.4   | - 70.5               | [model](https://www.dropbox.com/scl/fi/10b1ksatrws71yx1nhxtv/atlass-swedish-records-birth-dates.pth.tar?rlkey=c05pi1gajtgde4u6vu8tkaf14&dl=0) |
+| M-PR-1      | DD-M-YY  | 95.9   | + 10.7   | - 72.3               | [model](https://www.dropbox.com/scl/fi/ka17welpo1yijva6wsvjz/atlass-police-register-sheets-1.pth.tar?rlkey=aax6pj80tem47pwp6uhzjrmfk&dl=0) |
+| M-DDMYY     | DD-M-YY  | 96.2   | + 11.0   | - 74.3               | [model](https://www.dropbox.com/scl/fi/ks3fikgh6fojqvatrj1nu/atlass-ddmyy.pth.tar?rlkey=nb2h9xxuvsj6qkz9fy87eyctw&dl=0) |
+
+</details>
+
 
 ## Replicate Results
 You can find code to replicate all results in [cmds/cmds.md](cmds/cmds.md) and [cmds/atlass.md](cmds/atlass.md).
 
 ## License
-
 Our code is licensed under MIT (see [LICENSE](LICENSE)).
 
 ## Citing
