@@ -60,13 +60,11 @@ Single-dataset models
 Multi-dataset models
 </summary>
 
-| model    | Sequence          |        |      |      |      |        |      |      |        | url |
-| ---      | ---               | ---    | ---  | ---  | ---  | ---    | ---  | ---  | ---    | --- |
-|          |                    <th colspan="8"> SeqAcc @ Dataset </th>                      |     |
-|          |                   | DC-1   | DC-2 | PR-1 | PR-2 | SWE-BD | FR   | NHVD | SWE-DD |     |
-| M-DDMYYY | DD-M-YY           | 97.7   | 91.7 | 94.0 | 85.2 | 94.7   | 98.2 | 97.5 | 99.3   | [model](https://www.dropbox.com/scl/fi/0byqf68umo1par76wgjn9/full-ddmyyyy.pth.tar?rlkey=p6iclol7wq2nqzq7ft808z0uf&dl=0) |
-| M-DDMY   | DD-M-YY           | 97.6   | 91.9 | 94.0 | 85.2 | 94.7   |      |      |        | [model](https://www.dropbox.com/scl/fi/b0v990y1yzuxa7gi76klq/split-ddmyy.pth.tar?rlkey=9whwo6oihpwmt98r5f5f5sj9p&dl=0)                                                                            |
-| M-DDM    | DD-M              |        |      |      |      |        | 98.2 | 97.5 | 99.4   | [model](https://www.dropbox.com/scl/fi/ikyc6ywchbhomm6qdb5bj/split-ddm.pth.tar?rlkey=bi2cbbm3bzbkloo40z1j6fob0&dl=0)                                                                            |
+| model     | Sequence  | SeqAcc @ DC-1 | SeqAcc @ DC-2 | SeqAcc @ PR-1 | SeqAcc @ PR-2 | SeqAcc @ SBD | SeqAcc @ FR | SeqAcc @ NHVD | SeqAcc @ SDD | url |
+| ---       | ---       | ---           | ---           | ---           | ---           | ---             | ---         | ---           | ---             | --- |
+| M-DDMYYYY | DD-M-YY   | 97.7          | 91.7          | 94.0          | 85.2          | 94.7            | 98.2        | 97.5          | 99.3            | [model](https://www.dropbox.com/scl/fi/0byqf68umo1par76wgjn9/full-ddmyyyy.pth.tar?rlkey=p6iclol7wq2nqzq7ft808z0uf&dl=0) |
+| M-DDMYY   | DD-M-YY   | 97.6          | 91.9          | 94.0          | 85.2          | 94.7            |              |               |                 | [model](https://www.dropbox.com/scl/fi/b0v990y1yzuxa7gi76klq/split-ddmyy.pth.tar?rlkey=9whwo6oihpwmt98r5f5f5sj9p&dl=0) |
+| M-DDM     | DD-M      |               |               |               |               |                 | 98.2         | 97.5          | 99.4            | [model](https://www.dropbox.com/scl/fi/ikyc6ywchbhomm6qdb5bj/split-ddm.pth.tar?rlkey=bi2cbbm3bzbkloo40z1j6fob0&dl=0) |
 
 </details>
 
