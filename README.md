@@ -91,7 +91,8 @@ Swedish gradesheets transfer learning models
 
 
 ## Replicate Results
-You can find code to replicate all results in [cmds/cmds.md](cmds/cmds.md) and [cmds/atlass.md](cmds/atlass.md).
+You can find code to replicate all results in [cmds/cmds.md](cmds/cmds.md) (main results) and [cmds/atlass.md](cmds/atlass.md) (transfer learning).
+Note that you have to change the folder names at the top of the documents to match your local paths, and that the commands are tested on Windows Command Prompt and slight modifications might be needed depending on the console.
 
 ## License
 Our code is licensed under MIT (see [LICENSE](LICENSE)).
