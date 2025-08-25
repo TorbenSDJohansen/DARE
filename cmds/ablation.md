@@ -50,11 +50,11 @@ python train.py --formatter legacy.dates_ddmyyyy --output %EXPDIR% --dataset %ce
 ```
 set cexp=police-register-sheets-2
 
-python train.py --formatter legacy.dates_ddmyy --epochs 120 --warmup-epochs 5 -b 308 --lr 0.6 --output %EXPDIR% --dataset %cexp% --experiment %cexp%-no-aug-reg --config cfgs/efficientnetv2_s.yaml --data_dir %DATADIR% --no-aug --drop 0.0 --drop-path 0.0 --weight-decay 0.0 --smoothing 0.0 --initial-log --log-wandb
+python train.py --formatter legacy.dates_ddmyy --epochs 120 --warmup-epochs 5 -b 308 --lr 0.6 --output %EXPDIR% --dataset %cexp% --experiment %cexp%-no-aug-reg --config cfgs/efficientnetv2_s.yaml --data_dir %DATADIR% --no-aug --drop 0.0 --drop-path 0.0 --weight-decay 0.0 --smoothing 0.0 --initial-log --log-wandb --read-from-tar
 
-python train.py --formatter legacy.dates_ddmyyyy --output %EXPDIR% --dataset %cexp% --experiment %cexp%-no-reg --config cfgs/efficientnetv2_s.yaml --data_dir %DATADIR% --drop 0.0 --drop-path 0.0 --weight-decay 0.0 --smoothing 0.0 --initial-log --log-wandb
+python train.py --formatter legacy.dates_ddmyyyy --epochs 120 --warmup-epochs 5 -b 308 --lr 0.6 --output %EXPDIR% --dataset %cexp% --experiment %cexp%-no-reg --config cfgs/efficientnetv2_s.yaml --data_dir %DATADIR% --drop 0.0 --drop-path 0.0 --weight-decay 0.0 --smoothing 0.0 --initial-log --log-wandb --read-from-tar
 
-python train.py --formatter legacy.dates_ddmyyyy --output %EXPDIR% --dataset %cexp% --experiment %cexp%-no-aug --config cfgs/efficientnetv2_s.yaml --data_dir %DATADIR% --no-aug --initial-log --log-wandb
+python train.py --formatter legacy.dates_ddmyyyy --epochs 120 --warmup-epochs 5 -b 308 --lr 0.6 --output %EXPDIR% --dataset %cexp% --experiment %cexp%-no-aug --config cfgs/efficientnetv2_s.yaml --data_dir %DATADIR% --no-aug --initial-log --log-wandb --read-from-tar
 ```
 
 ## DDMYYYY
