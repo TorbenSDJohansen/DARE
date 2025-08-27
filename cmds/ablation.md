@@ -54,9 +54,9 @@ set cexp=police-register-sheets-2
 
 python train.py --formatter legacy.dates_ddmyy --epochs 120 --warmup-epochs 5 -b 308 --lr 0.6 --output %EXPDIR% --dataset %cexp% --experiment %cexp%-no-aug-reg --config cfgs/efficientnetv2_s.yaml --data_dir %DATADIR% --no-aug --drop 0.0 --drop-path 0.0 --weight-decay 0.0 --smoothing 0.0 --initial-log --log-wandb --read-from-tar
 
-python train.py --formatter legacy.dates_ddmyyyy --epochs 120 --warmup-epochs 5 -b 308 --lr 0.6 --output %EXPDIR% --dataset %cexp% --experiment %cexp%-no-reg --config cfgs/efficientnetv2_s.yaml --data_dir %DATADIR% --drop 0.0 --drop-path 0.0 --weight-decay 0.0 --smoothing 0.0 --initial-log --log-wandb --read-from-tar
+python train.py --formatter legacy.dates_ddmyy --epochs 120 --warmup-epochs 5 -b 308 --lr 0.6 --output %EXPDIR% --dataset %cexp% --experiment %cexp%-no-reg --config cfgs/efficientnetv2_s.yaml --data_dir %DATADIR% --drop 0.0 --drop-path 0.0 --weight-decay 0.0 --smoothing 0.0 --initial-log --log-wandb --read-from-tar
 
-python train.py --formatter legacy.dates_ddmyyyy --epochs 120 --warmup-epochs 5 -b 308 --lr 0.6 --output %EXPDIR% --dataset %cexp% --experiment %cexp%-no-aug --config cfgs/efficientnetv2_s.yaml --data_dir %DATADIR% --no-aug --initial-log --log-wandb --read-from-tar
+python train.py --formatter legacy.dates_ddmyy --epochs 120 --warmup-epochs 5 -b 308 --lr 0.6 --output %EXPDIR% --dataset %cexp% --experiment %cexp%-no-aug --config cfgs/efficientnetv2_s.yaml --data_dir %DATADIR% --no-aug --initial-log --log-wandb --read-from-tar
 ```
 
 ## DDMYYYY
@@ -93,6 +93,18 @@ python evaluate.py --formatter legacy.dates_ddmyyyy --output %EVALDIR%\%cexp%\%c
 python evaluate.py --formatter legacy.dates_ddmyyyy --output %EVALDIR%\%cexp%\%cexp%-lr=0.125 --dataset %cexp% --checkpoint %EXPDIR%\%cexp%-lr=0.125\last.pth.tar --config cfgs/efficientnetv2_s.yaml --data_dir %DATADIR% -b %EVAL_BATCHSIZE% --plots montage cov-acc cer-acc
 
 python evaluate.py --formatter legacy.dates_ddmyyyy --output %EVALDIR%\%cexp%\%cexp%-no-sched --dataset %cexp% --checkpoint %EXPDIR%\%cexp%-no-sched\last.pth.tar --config cfgs/efficientnetv2_s.yaml --data_dir %DATADIR% -b %EVAL_BATCHSIZE% --plots montage cov-acc cer-acc
+```
+
+## PR-2
+
+```
+set cexp=police-register-sheets-2
+
+python evaluate.py --formatter legacy.dates_ddmyy --output %EVALDIR%\%cexp%\%cexp%-no-reg --dataset %cexp% --checkpoint %EXPDIR%\%cexp%-no-reg\last.pth.tar --config cfgs/efficientnetv2_s.yaml --data_dir %DATADIR% -b %EVAL_BATCHSIZE% --plots montage cov-acc cer-acc
+
+python evaluate.py --formatter legacy.dates_ddmyy --output %EVALDIR%\%cexp%\%cexp%-no-aug --dataset %cexp% --checkpoint %EXPDIR%\%cexp%-no-aug\last.pth.tar --config cfgs/efficientnetv2_s.yaml --data_dir %DATADIR% -b %EVAL_BATCHSIZE% --plots montage cov-acc cer-acc
+
+python evaluate.py --formatter legacy.dates_ddmyy --output %EVALDIR%\%cexp%\%cexp%-no-aug-reg --dataset %cexp% --checkpoint %EXPDIR%\%cexp%-no-aug-reg\last.pth.tar --config cfgs/efficientnetv2_s.yaml --data_dir %DATADIR% -b %EVAL_BATCHSIZE% --plots montage cov-acc cer-acc
 ```
 
 ## DDMYYYY
