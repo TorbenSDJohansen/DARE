@@ -17,6 +17,8 @@ from sklearn.model_selection import train_test_split
 
 import pandas as pd
 
+from grade_formatter import ALLOWED_GRADE
+
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser()
@@ -66,7 +68,7 @@ def parse_args() -> argparse.Namespace:
 
 
 def load_workspace(file: str) -> pd.DataFrame:
-    with open(file, 'r') as stream:
+    with open(file, 'r', encoding='utf-8') as stream:
         workspace = json.load(stream)
 
     cursor = workspace['cursor'] + 1 # image reached in workspace
@@ -81,6 +83,13 @@ def load_workspace(file: str) -> pd.DataFrame:
     # NOTE: Some fields left empty miss default_tag, but not sure why, above
     # .get() is fix: Note this is *not* the case for all fields left empty,
     # only for some, which is what is puzzling.
+
+    # Empty values currently coded as empty spring, instead use
+    # more explicit name
+    labels['label'] = labels['label'].replace('', 'empty')
+
+    # Drop values not in allowed list
+    labels = labels[labels['label'].isin(ALLOWED_GRADE)]
 
     return labels
 
