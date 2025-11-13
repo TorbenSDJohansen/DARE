@@ -96,6 +96,10 @@ Note that you have to change the folder names at the top of the documents to mat
 
 For our ablation results, see [cmds/ablation.md](cmds/ablation.md).
 
+For our transfer learning to non-date dataset results, see [cmds/transfer_non_date.md](cmds/transfer_non_date.md).
+
+For our experiments with synthetic data, see [cmds/synthetic.md](cmds/synthetic.md).
+
 ## License
 Our code is licensed under MIT (see [LICENSE](LICENSE)).
 

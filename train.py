@@ -73,7 +73,6 @@ from timmsn.data import (
 from timmsn.data.parsers import (
     setup_sqnet_parser,
     setup_tarball_parser,
-    setup_synthetic_parser,
     SynthParser,
     )
 from timmsn.data.formatters.constants import PAD_IDX
@@ -81,6 +80,7 @@ from timmsn.data.formatters.constants import PAD_IDX
 # other imports
 from argparser import parse_args
 from engine import train_one_epoch, validate
+from synth_date_parser import setup_synthetic_date_parser
 
 has_amp = False # pylint: disable=C0103
 try:
@@ -112,7 +112,7 @@ def main(): # pylint: disable=R0914, R0912, R0915, C0116
         raise ValueError('Must provide value for option --formatter.')
 
     if isinstance(args.dataset, str) and args.dataset.startswith('synthetic'):
-        setup_fn = setup_synthetic_parser
+        setup_fn = setup_synthetic_date_parser
     elif args.read_from_tar:
         setup_fn = setup_tarball_parser
     else:
