@@ -81,6 +81,7 @@ from timmsn.data.formatters.constants import PAD_IDX
 from argparser import parse_args
 from engine import train_one_epoch, validate
 from synth_date_parser import setup_synthetic_date_parser
+import grade_formatter
 
 has_amp = False # pylint: disable=C0103
 try:
