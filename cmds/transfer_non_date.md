@@ -11,19 +11,19 @@ set EVAL_BATCHSIZE=2048
 # Prepare data from ENS workspace
 
 ```
-python workspace_to_label.py --wsp-dir Z:\data_cropouts\Labels\DARE\swedish-grades\fromDaniel --output-dir Z:\data_cropouts\Labels\DARE\swedish-grades\labels --share-test 0.5 --add-filename-hash-to-seed
+python workspace_to_label.py --wsp-dir Z:\data_cropouts\Labels\DARE\swedish-grades\fromDaniel --output-dir Z:\data_cropouts\Labels\DARE\swedish-grades\labels --share-test 0.7557 --add-filename-hash-to-seed
 ```
 
 # Train
 
 From ImageNet21k
 ```
-python train.py --formatter grades --output %EXPDIR% --dataset swedish-grades --experiment swedish-grades --config cfgs/efficientnetv2_s.yaml --data_dir %DATADIR% --initial-log --log-wandb
+python train.py --formatter grades --output %EXPDIR% --dataset swedish-grades --experiment swedish-grades-ne --config cfgs/efficientnetv2_s.yaml --data_dir %DATADIR% --initial-log --log-wandb
 ```
 
 From DARE (from `full-ddmyyyy`)
 ```
-python train.py --formatter grades --output %EXPDIR% --dataset swedish-grades --experiment swedish-grades-tl --config cfgs/efficientnetv2_s.yaml --data_dir %DATADIR% --initial-log --initial-checkpoint Z:\faellesmappe\tsdj\DARE\experiments\full-ddmyyyy\last.pth.tar --drop-modules classifier* --log-wandb
+python train.py --formatter grades --output %EXPDIR% --dataset swedish-grades --experiment swedish-grades-ne-tl --config cfgs/efficientnetv2_s.yaml --data_dir %DATADIR% --initial-log --initial-checkpoint Z:\faellesmappe\tsdj\DARE\experiments\full-ddmyyyy\last.pth.tar --drop-modules classifier* --log-wandb
 ```
 
 # Evaluate

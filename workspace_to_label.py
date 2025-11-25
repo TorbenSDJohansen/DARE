@@ -88,6 +88,9 @@ def load_workspace(file: str) -> pd.DataFrame:
     # more explicit name
     labels['label'] = labels['label'].replace('', 'empty')
 
+    # Dominated by empty values - let us make version without
+    labels = labels[labels['label'] != 'empty']
+ 
     # Drop values not in allowed list
     labels = labels[labels['label'].isin(ALLOWED_GRADE)]
 
