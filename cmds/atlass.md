@@ -212,7 +212,6 @@ python -m torch.distributed.launch --nproc_per_node=2 train.py ^
 --data_dir %DATADIR% ^
 --labels-subdir %cexp%  ^
 --config %EXPDIR%\cfgs\default-no-pretrained.yaml
-
 ```
 
 Test also TL from 5 individual dataset DARE models. For DC models, drop heads
