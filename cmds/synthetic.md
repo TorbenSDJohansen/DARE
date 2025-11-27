@@ -5,18 +5,8 @@ set DATADIR=Z:\data_cropouts\Labels\DARE
 set EXPDIR=Z:\faellesmappe\tsdj\DARE\synthetic
 set EVALDIR=Z:\faellesmappe\tsdj\DARE\eval-synthetic
 
-set ALL_DATASETS_FLAT=cihvr death-certificates-1 death-certificates-2 funeral-records police-register-sheets-1 police-register-sheets-2 swedish-records-birth-dates swedish-records-death-dates
-set ALL_DATASETS=(cihvr, death-certificates-1, death-certificates-2, funeral-records, police-register-sheets-1, police-register-sheets-2, swedish-records-birth-dates, swedish-records-death-dates)
-
-set DDMYY_DATASETS_FLAT=death-certificates-1 death-certificates-2 police-register-sheets-1 police-register-sheets-2 swedish-records-birth-dates
-set DDMYY_DATASETS=(death-certificates-1, death-certificates-2, police-register-sheets-1, police-register-sheets-2, swedish-records-birth-dates)
-
-set DDM_DATASETS_FLAT=cihvr funeral-records swedish-records-death-dates
-set DDM_DATASETS=(cihvr, funeral-records, swedish-records-death-dates)
-
 set EVAL_BATCHSIZE=2048
 ```
-**Note**: Need to change `DATA_DIR` to match where the DARE database is stored and `EXPDIR` and `EVALDIR` to desired paths for models and evaluation results, respectively.
 
 # Train
 

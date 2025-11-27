@@ -54,6 +54,7 @@ from timmsn.data.formatters.constants import PAD_IDX, BOS_IDX, EOS_IDX
 
 # other imports
 from argparser import parse_args
+import grade_formatter
 
 has_cv2 = False # pylint: disable=C0103
 try:
