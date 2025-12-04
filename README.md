@@ -8,7 +8,7 @@ Code related to the paper [DARE: A large-scale handwritten DAte REcognition syst
 - [Citing](#citing)
 
 ## Download Database
-The DARE database can be downloaded from [Kaggle](https://www.kaggle.com/datasets/sdusimonwittrock/dare-database).
+The DARE database can be downloaded from [Zenodo](https://zenodo.org/records/17589563).
 It consists of seven datasets, each with its own train and test split.
 The number of observation in each dataset varies beteen ~10k and ~1M.
 
